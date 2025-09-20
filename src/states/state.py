@@ -1,0 +1,13 @@
+from pydantic import BaseModel, Field
+from typing_extensions import TypedDict
+
+class Email(BaseModel):
+    id: str = Field(..., description="El identificador único del correo electrónico.")
+    subject: str = Field(..., description="El asunto del correo electrónico.")
+    sender: str = Field(..., description="La dirección de correo electrónico del remitente.")
+    date: str = Field(..., description="La fecha en que se envió el correo electrónico.")
+    body: str = Field(..., description="El contenido del cuerpo del correo electrónico.")
+    
+class GraphState(TypedDict):
+    current_email: Email | str
+    email_category: str

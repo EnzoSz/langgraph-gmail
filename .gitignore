@@ -1,0 +1,96 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+*.pyo
+*.pyd
+build/
+dist/
+wheels/
+*.egg-info/
+*.egg
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env/
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos de credenciales y autenticación
+credentials.json
+token.json
+*.credentials
+*.token
+service-account.json
+client_secret*.json
+
+# Archivos de configuración con datos sensibles
+config.json
+settings.json
+secrets.json
+.secrets
+
+# Logs
+*.log
+logs/
+log/
+
+# Base de datos locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos temporales
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Archivos de IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Testing
+.pytest_cache/
+.tox/
+
+# Archivos específicos de Azure/OpenAI
+azure_config.json
+openai_config.json
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Archivos de correo descargados (si los hay)
+emails/
+downloaded_emails/
+mail_data/
