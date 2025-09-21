@@ -105,10 +105,9 @@ email_graph.png
 email_flow_detailed.png
 langgraph_native.png
 langgraph_styled.png
-mi_grafo_langgraph.png
 visualize_graph.py
 visualize_with_langgraph.py
 generate_langsmith_style.py
 
-# Mantener solo el grafo principal (descomenta la línea de abajo si quieres mantener uno específico)
-# !graph_main.png
+# Mantener la imagen principal del grafo para el README
+!mi_grafo_langgraph.png
