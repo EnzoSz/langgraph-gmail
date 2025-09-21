@@ -12,18 +12,19 @@ def main():
             'date': '',
             'body': ''
         },
-        'email_category': ''
+        'email_category': '',
+        'email_response': '',
+        'messages': [""]
     }
     
     workflow = EmailSupportGraph()
     graph = workflow.graph
     
     for output in graph.stream(initial_state):
-        for _, value in output.items():
-            current_email = value.get('current_email', {})
-            if isinstance(current_email, Email):
-                print(current_email.body)
-                print(value.get('email_category', ''))
+        for node, state in output.items():
+            print(f"Node: \n {node}")
+            print(f"State: \n {state}\n")
+            
 
 if __name__ == "__main__":
     main()

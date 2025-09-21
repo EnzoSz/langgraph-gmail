@@ -46,6 +46,10 @@ log/
 *.sqlite
 *.sqlite3
 
+# Base de datos vectorial Chroma
+chroma_db/
+*.chroma
+
 # Archivos temporales
 *.tmp
 *.temp
@@ -94,3 +98,17 @@ openai_config.json
 emails/
 downloaded_emails/
 mail_data/
+
+# Archivos de visualización del grafo (mantener solo la imagen principal)
+*.mmd
+email_graph.png
+email_flow_detailed.png
+langgraph_native.png
+langgraph_styled.png
+mi_grafo_langgraph.png
+visualize_graph.py
+visualize_with_langgraph.py
+generate_langsmith_style.py
+
+# Mantener solo el grafo principal (descomenta la línea de abajo si quieres mantener uno específico)
+# !graph_main.png

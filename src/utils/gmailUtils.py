@@ -2,6 +2,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow # Esta clase permite mane
 from google.oauth2.credentials import Credentials # Esta clase representa las credenciales de un usuario autenticado.
 from google.auth.transport.requests import Request # Esta clase permite realizar solicitudes HTTP para obtener tokens de acceso.
 from googleapiclient.discovery import build # Esta función permite construir un cliente para interactuar con la API de Gmail.
+from email.mime.text import MIMEText
 import base64
 import datetime
 import uuid
@@ -60,7 +61,10 @@ def _parser_email_message(message) -> Email:
         subject=subject,
         sender=sender,
         date=date,
-        body=body
+        body=body,
+        message_id=message_id,
+        references=references,
+        thread_id=message['threadId']
     )
 
 def get_most_recent_email() -> Email | str:
@@ -78,3 +82,74 @@ def get_most_recent_email() -> Email | str:
     except Exception as e:
         print(f'Error retrieving email: {e}')
         return None
+
+def send_reply_email(original_email: Email, reply_email: Email) -> bool:
+    """
+    Send a reply email to the original sender that will appear as a threaded reply.
+    """
+    try:
+        service = _get_gmail_service()
+
+        sender_email = original_email.sender # Micorreo <micorreo@gmail.com>
+        if '<' in sender_email and '>' in sender_email:
+            sender_email = sender_email.split('<')[1].split('>')[0]
+
+        print(f"Reply will be sent to: {sender_email}")
+
+        reply_subject = reply_email.subject
+        original_subject = original_email.subject
+        if original_subject.startswith('Re:'):
+            reply_subject = original_subject
+        else:
+            reply_subject = f"Re: {original_subject}" # Re: no me gustan tus productos
+
+        message_id = original_email.message_id
+        references = original_email.references
+        thread_id = original_email.thread_id
+
+        if not message_id:
+            message_id = f"<{original_email.id}@gmail.com>"
+
+        message = _create_reply_message_with_thread(
+            to=sender_email,
+            subject=reply_subject,
+            message_text=reply_email.body,
+            original_message_id=message_id,
+            original_references=references,
+            thread_id=thread_id
+        )
+
+        sent_message = service.users().messages().send(userId='me', body=message).execute()
+
+        print(f"Threaded reply email sent successfully. Message ID: {sent_message['id']}")
+        return True
+
+    except Exception as error:
+        print(f'An error occurred while sending reply email: {error}')
+        return False
+
+def _create_reply_message_with_thread(to: str, subject: str, message_text: str, original_message_id: str, original_references: str, thread_id: str) -> dict:
+    """
+    Create a reply message that will appear as a threaded reply with proper thread ID.
+    """
+    message = MIMEText(message_text)
+    message['to'] = to
+    message['subject'] = subject
+
+    if original_message_id:
+        message['In-Reply-To'] = original_message_id
+        if original_references:
+            references = f"{original_references} {original_message_id}".strip()
+        else:
+            references = original_message_id
+        message['References'] = references
+
+        message['Message-ID'] = f"<{uuid.uuid4()}@gmail.com>"
+
+    body = {
+        'raw': base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+    }
+
+    if thread_id:
+        body['threadId'] = thread_id
+    return body

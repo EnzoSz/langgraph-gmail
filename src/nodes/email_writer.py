@@ -19,7 +19,13 @@ def _process_email_writer_result(state: GraphState, result):
     """
     Función auxiliar para procesar el resultado del agente escritor de emails y actualizar el estado.
     """
-    state['messages'] = result
+    # Solo agregar el resultado a messages si es un mensaje válido, no reemplazar toda la lista
+    if hasattr(result, 'content'):
+        # Si result es un mensaje, agregarlo a la lista existente
+        current_messages = state.get('messages', [])
+        current_messages.append(result)
+        state['messages'] = current_messages
+    
     state['email_response'] = result
     return state
 
@@ -46,8 +52,7 @@ def email_writer_with_context_node(state: GraphState):
         return state
         
     body, category = email_data
-    
-    context = state.get('messages'[-1].content if state.get('messages') else "")
-    
+    context = state.get('messages')[-1].content if state.get('messages') else ""
     result = AGENTS_REGISTRY["write_email_with_context"].invoke({"email_content": body, "email_category": category, "context": context})
-    return _process_email_writer_result(state, result)
+    state['email_response'] = result
+    return state

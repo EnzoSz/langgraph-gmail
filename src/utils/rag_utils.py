@@ -7,12 +7,12 @@ from dotenv import load_dotenv
 import os
 load_dotenv()  # Carga las variables de entorno desde el archivo .env
 
-loader = TextLoader("src/data/data.txt")
+loader = TextLoader("src/data/data.txt", encoding="utf-8")
 
 documents = loader.load()
 
-text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    chunk_size=100,
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,
     chunk_overlap=50,
 )
 
@@ -34,9 +34,8 @@ retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k
 
 retriever_tool = create_retriever_tool(
     retriever=retriever,
-    name="Recuperar información sobre productos y servicios",
-    description="Útil para responder preguntas sobre los productos y servicios que ofrece la empresa.",
-    return_direct=True # Devuelve los documentos directamente
+    name="recuperar_informacion_productos_servicios",
+    description="Útil para responder preguntas sobre los productos y servicios que ofrece la empresa."
 )
 
 def get_retriever_tool():

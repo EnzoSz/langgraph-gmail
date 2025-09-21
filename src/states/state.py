@@ -9,6 +9,9 @@ class Email(BaseModel):
     sender: str = Field(..., description="La dirección de correo electrónico del remitente.")
     date: str = Field(..., description="La fecha en que se envió el correo electrónico.")
     body: str = Field(..., description="El contenido del cuerpo del correo electrónico.")
+    message_id: str = Field(..., description="El ID del mensaje para hilos de correo electrónico.")
+    references: str = Field(..., description="Las referencias del correo electrónico para hilos.")
+    thread_id: str = Field(..., description="El ID del hilo del correo electrónico.")
     
 class GraphState(TypedDict):
     current_email: Email | str
